@@ -7,10 +7,7 @@ const localStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const app = express();
 
-mongoose.connect("mongodb://localhost:27017/node-auth", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
+mongoose.connect("mongodb://localhost:27017/node-auth");
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -26,7 +23,7 @@ const UserSchema = new mongoose.Schema({
 const User = mongoose.model('User', UserSchema);
 
 //Middleware
-app.engine('hbs', hbs({ extname: '.hbs' }));
+app.engine('hbs', hbs.engine({ extname: '.hbs' }));
 app.set('view engine', 'hbs');
 app.use(express.static(__dirname + '/public'));
 app.use(session({
@@ -63,3 +60,11 @@ passport.use(new localStrategy(function (username, password, done) {
         });
     });
 }));
+
+app.get('/', (req, res) => {
+    res.render("index", { title: "Home" });
+});
+
+app.listen(3000, () => {
+    console.log("Listening on port 3000");
+});
