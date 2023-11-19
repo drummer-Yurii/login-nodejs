@@ -1,0 +1,27 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Fira sans', sans-serif;
+}
+
+body {
+    background-color: #2F4960;
+    background-image: linear-gradient(to bottom right, #2F4960 10%, #102040);
+}
+
+.app {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.home {
+    width: 100%;
+    max-width: 400px;
+    padding: 50px 30px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    text-align: center;
+}
