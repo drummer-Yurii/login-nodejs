@@ -69,12 +69,17 @@ function isLoggedIn(req, res, next) {
     res.redirect('/login');
 }
 
+function isLoggedOut(req, rea, next) {
+    if (!req.isAuthenticated()) return next();
+    res.redirect('/');
+}
+
 // Routes
 app.get('/', isLoggedIn, (req, res) => {
     res.render("index", { title: "Home" });
 });
 
-app.get('/login', (req, res) => {
+app.get('/login', isLoggedOut, (req, res) => {
     res.render('login', { title: "Login" });
 });
 
@@ -82,6 +87,15 @@ app.post('/login', passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/login?error=true'
 }));
+
+app.get('/logout', function (req, res) {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/');
+  });
+});
 
 // Setup our admin user
 app.get('/setup', async (req, res) => {
