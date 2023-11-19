@@ -7,7 +7,10 @@ const localStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const app = express();
 
-mongoose.connect("mongodb://localhost:27017/node-auth");
+mongoose.connect('mongodb://localhost:27017/node-auth', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -75,6 +78,11 @@ app.get('/login', (req, res) => {
     res.render('login', { title: "Login" });
 });
 
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login?error=true'
+}));
+
 // Setup our admin user
 app.get('/setup', async (req, res) => {
     const exists = await User.exists({ username: "admin" });
@@ -86,7 +94,7 @@ app.get('/setup', async (req, res) => {
 
     bcrypt.genSalt(10, function (err, salt) {
         if (err) return next(err);
-        bcrypt.hash("mypassword", salt, function (err, hash) {
+        bcrypt.hash("pass", salt, function (err, hash) {
             if (err) return next(err);
             const newAdmin = new User({
                 username: "admin",
