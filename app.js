@@ -12,6 +12,19 @@ mongoose.connect("mongodb://localhost:27017/node-auth", {
     useUnifiedTopology: true
 });
 
+const UserSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    }
+});
+
+const User = mongoose.model('User', UserSchema);
+
 //Middleware
 app.engine('hbs', hbs({ extname: '.hbs' }));
 app.set('view engine', 'hbs');
@@ -33,5 +46,7 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(function (id, done) {
-    // Setup user model
-})
+    User.findById(id, function (err, user) {
+        done(err, user);
+    });
+});
