@@ -61,8 +61,13 @@ passport.use(new localStrategy(function (username, password, done) {
     });
 }));
 
+// Routes
 app.get('/', (req, res) => {
     res.render("index", { title: "Home" });
+});
+
+app.get('/login', (req, res) => {
+    res.render('login', { title: "Login" });
 });
 
 app.listen(3000, () => {
