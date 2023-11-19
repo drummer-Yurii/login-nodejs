@@ -26,7 +26,7 @@ const UserSchema = new mongoose.Schema({
 const User = mongoose.model('User', UserSchema);
 
 //Middleware
-app.engine('hbs', hbs.engine({ extname: '.hbs' }));
+app.engine('hbs', hbs({ extname: '.hbs' }));
 app.set('view engine', 'hbs');
 app.use(express.static(__dirname + '/public'));
 app.use(session({
@@ -80,7 +80,11 @@ app.get('/', isLoggedIn, (req, res) => {
 });
 
 app.get('/login', isLoggedOut, (req, res) => {
-    res.render('login', { title: "Login" });
+    const response = {
+        title: 'Login',
+        error: req.query.error
+    }
+    res.render('login', response);
 });
 
 app.post('/login', passport.authenticate('local', {
